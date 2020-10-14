@@ -143,12 +143,32 @@ void solve()
 {
     int n;
     R(n);
-    REP(i, 1, n + 1)
+    VI a(n), ans(n, 0);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        R(a[i]);
+    }
+    stack<int> ST;
+    REPR(i, n - 1, -1)
+    {
+        while (!ST.empty() && a[i] < a[ST.top()])
+        {
+            ans[ST.top()] = i;
+            ST.pop();
+        }
+        ST.push(i);
+    }
+    while (!ST.empty())
+    {
+        ans[ST.top()] = -1;
+        ST.pop();
+    }
+    REP(i, 0, n)
+    {
+        cout << ans[i] + 1 << ' ';
     }
 }
+
 signed main()
 {
     sync;

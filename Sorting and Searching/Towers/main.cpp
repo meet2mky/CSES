@@ -138,16 +138,62 @@ Do not panic & work hard you will get it right one day
 
 LOOP ITERATORS MIXING ~ WASTE OF TIME AND LOTS OF BUG
 ******************************************************************/
-
+int longest_strict_increasing(VI &arr)
+{
+    if (SZ(arr) == 0)
+        return 0;
+    vector<int> res = {arr[0]};
+    REP(i, 1, SZ(arr))
+    {
+        if (arr[i] > res.back())
+        {
+            res.push_back(arr[i]);
+        }
+        else if (arr[i] < res[0])
+        {
+            res[0] = arr[i];
+        }
+        else
+        {
+            auto it = lower_bound(ALL(res), arr[i]);
+            *it = arr[i];
+        }
+    }
+    return SZ(res);
+}
+int longest_non_strict_increasing(VI &arr)
+{
+    if (SZ(arr) == 0)
+        return 0;
+    VI res = {arr[0]};
+    REP(i, 1, SZ(arr))
+    {
+        if (arr[i] >= res.back())
+        {
+            res.push_back(arr[i]);
+        }
+        else if (arr[i] < res[0])
+        {
+            res[0] = arr[i];
+        }
+        else
+        {
+            auto it = upper_bound(ALL(res), arr[i]);
+            *it = arr[i];
+        }
+    }
+    return SZ(res);
+}
 void solve()
 {
     int n;
     R(n);
-    REP(i, 1, n + 1)
+    VI a(n);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        R(a[i]);
     }
+    W(longest_non_strict_increasing(a));
 }
 signed main()
 {

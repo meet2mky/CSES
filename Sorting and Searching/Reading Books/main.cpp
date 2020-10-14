@@ -138,17 +138,21 @@ Do not panic & work hard you will get it right one day
 
 LOOP ITERATORS MIXING ~ WASTE OF TIME AND LOTS OF BUG
 ******************************************************************/
-
+#define int long long
 void solve()
 {
-    int n;
+    int n, sum = 0;
     R(n);
-    REP(i, 1, n + 1)
+    VI a(n);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        R(a[i]);
+        sum += a[i];
     }
+    SORT(a);
+    W(max(2 * a[n - 1], sum));
 }
+
 signed main()
 {
     sync;

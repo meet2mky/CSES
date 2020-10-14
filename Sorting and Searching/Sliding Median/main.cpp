@@ -138,15 +138,123 @@ Do not panic & work hard you will get it right one day
 
 LOOP ITERATORS MIXING ~ WASTE OF TIME AND LOTS OF BUG
 ******************************************************************/
-
+multiset<int> top, bot;
+int topsum = 0, botsum = 0;
+void addtop(int x)
+{
+    topsum += x;
+    top.insert(x);
+}
+void removetop(int x)
+{
+    topsum -= x;
+    top.erase(top.lower_bound(x));
+}
+void addbot(int x)
+{
+    botsum += x;
+    bot.insert(x);
+}
+void removebot(int x)
+{
+    botsum -= x;
+    bot.erase(bot.lower_bound(x));
+}
+void add(int x)
+{
+    if (x >= *top.begin())
+    {
+        addtop(x);
+    }
+    else
+    {
+        addbot(x);
+    }
+    if (SZ(top) - SZ(bot) >= 2)
+    {
+        auto it = top.begin();
+        removetop(*it);
+        addbot(*it);
+    }
+    if (SZ(bot) > SZ(top))
+    {
+        auto it = bot.end();
+        it--;
+        removebot(*it);
+        addtop(*it);
+    }
+}
+void remove(int x)
+{
+    if (top.find(x) != top.end())
+    {
+        removetop(x);
+        if (SZ(top) < SZ(bot))
+        {
+            auto it = bot.end();
+            it--;
+            removebot(*it);
+            addtop(*it);
+        }
+    }
+    else
+    {
+        removebot(x);
+        if (SZ(top) - SZ(bot) >= 2)
+        {
+            auto it = top.begin();
+            removetop(*it);
+            addbot(*it);
+        }
+    }
+}
+int median()
+{
+    if (SZ(top) == SZ(bot))
+    {
+        auto it = bot.end();
+        it--;
+        return *it;
+    }
+    else
+    {
+        auto it = top.begin();
+        return *it;
+    }
+}
+void print()
+{
+    for (auto x : bot)
+    {
+        cout << x << ' ';
+    }
+    cout << " || ";
+    for (auto x : top)
+    {
+        cout << x << ' ';
+    }
+    cout << endl;
+}
 void solve()
 {
-    int n;
-    R(n);
-    REP(i, 1, n + 1)
+    int n, k;
+    R(n, k);
+    VI a(n);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        R(a[i]);
+    }
+    REP(i, 0, n)
+    {
+        add(a[i]);
+        if (i - k >= 0)
+        {
+            remove(a[i - k]);
+        }
+        if (i >= k - 1)
+        {
+            cout << median() << ' ';
+        }
     }
 }
 signed main()

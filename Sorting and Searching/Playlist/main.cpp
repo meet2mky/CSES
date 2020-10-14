@@ -143,11 +143,28 @@ void solve()
 {
     int n;
     R(n);
-    REP(i, 1, n + 1)
+    VI a(n);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        R(a[i]);
     }
+    unordered_map<int, int> mp;
+    mp.reserve(200000); // makes map faster
+    int best = 0;
+    int l = 0;
+    int r = 0; // [l...r)
+    while (r < n)
+    {
+        while (mp[a[r]] > 0)
+        {
+            mp[a[l]]--;
+            l++;
+        }
+        mp[a[r]]++;
+        r++;
+        best = max(best, r - l);
+    }
+    W(best);
 }
 signed main()
 {

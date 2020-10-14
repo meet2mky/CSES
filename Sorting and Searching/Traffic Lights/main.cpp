@@ -141,14 +141,30 @@ LOOP ITERATORS MIXING ~ WASTE OF TIME AND LOTS OF BUG
 
 void solve()
 {
-    int n;
-    R(n);
-    REP(i, 1, n + 1)
+    set<int> s;
+    multiset<int> d;
+    int x, n;
+    R(x, n);
+    s.insert(0);
+    s.insert(x);
+    d.insert(x);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        int pos;
+        R(pos);
+        auto it = s.upper_bound(pos);
+        int r = *it;
+        it--;
+        int l = *it;
+        d.erase(d.lower_bound(r - l));
+        s.insert(pos);
+        d.insert(pos - l);
+        d.insert(r - pos);
+        _W(*d.rbegin());
+        _W(' ');
     }
 }
+
 signed main()
 {
     sync;

@@ -122,7 +122,7 @@ void W(const T &head, const U &... tail)
 #define DEBUG(...)
 #endif
 
-//#define NEEDLONG
+#define NEEDLONG
 #ifdef NEEDLONG
 #define int long long
 #endif
@@ -143,12 +143,18 @@ void solve()
 {
     int n;
     R(n);
-    REP(i, 1, n + 1)
+    VI a(n);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        R(a[i]);
     }
+    REP(i, 1, n)
+    {
+        a[i] = max(a[i], a[i] + a[i - 1]);
+    }
+    W(*max_element(ALL(a)));
 }
+
 signed main()
 {
     sync;

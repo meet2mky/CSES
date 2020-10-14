@@ -138,17 +138,32 @@ Do not panic & work hard you will get it right one day
 
 LOOP ITERATORS MIXING ~ WASTE OF TIME AND LOTS OF BUG
 ******************************************************************/
-
+#define int long long
 void solve()
 {
-    int n;
-    R(n);
-    REP(i, 1, n + 1)
+    int n, a, b;
+    R(n, a, b);
+    VI arr(n + 1, 0);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        R(arr[i + 1]);
+        arr[i + 1] += arr[i];
     }
+    int best = -LINF;
+    multiset<int> values;
+    values.insert(arr[0]);
+    REP(i, a, n + 1)
+    {
+        best = max(best, arr[i] - *values.begin());
+        values.insert(arr[i - a + 1]);
+        if (i - b >= 0)
+        {
+            values.erase(values.lower_bound(arr[i- b]));
+        }
+    }
+    W(best);
 }
+
 signed main()
 {
     sync;

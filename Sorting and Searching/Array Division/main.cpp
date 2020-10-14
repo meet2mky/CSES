@@ -138,17 +138,55 @@ Do not panic & work hard you will get it right one day
 
 LOOP ITERATORS MIXING ~ WASTE OF TIME AND LOTS OF BUG
 ******************************************************************/
-
+#define int long long
+const int N = 2e5 + 10;
+VI a(N);
+int n, k;
+bool can(int sum)
+{
+    int parts = 1;
+    int remsum = sum;
+    REP(i, 0, n)
+    {
+        if (a[i] > sum)
+        {
+            return false;
+        }
+        if (a[i] <= remsum)
+        {
+            remsum -= a[i];
+        }
+        else
+        {
+            parts++;
+            remsum = sum - a[i];
+        }
+    }
+    return (parts <= k);
+}
 void solve()
 {
-    int n;
-    R(n);
-    REP(i, 1, n + 1)
+    R(n, k);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        R(a[i]);
     }
+    int l = 0, r = 1e18;
+    while (r - l > 1)
+    {
+        int mid = (r + l) / 2;
+        if (can(mid))
+        {
+            r = mid;
+        }
+        else
+        {
+            l = mid;
+        }
+    }
+    W(r);
 }
+
 signed main()
 {
     sync;

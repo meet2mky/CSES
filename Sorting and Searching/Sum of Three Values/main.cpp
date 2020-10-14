@@ -141,14 +141,34 @@ LOOP ITERATORS MIXING ~ WASTE OF TIME AND LOTS OF BUG
 
 void solve()
 {
-    int n;
-    R(n);
-    REP(i, 1, n + 1)
+    int n, x;
+    R(n, x);
+    VPII a(n);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        R(a[i].first);
+        a[i].second = i;
     }
+    SORT(a);
+    map<int, int> mp;
+    REP(i, 0, n)
+    {
+        REP(j, i + 1, n)
+        {
+            if (x - a[j].first - a[i].first < 0)
+                break;
+            if (mp.find(x - a[j].first - a[i].first) != mp.end())
+            {
+                auto t = mp[x - a[j].first - a[i].first];
+                W(a[i].second + 1, a[j].second + 1, t + 1);
+                return;
+            }
+        }
+        mp[a[i].first] = a[i].second;
+    }
+    W("IMPOSSIBLE");
 }
+
 signed main()
 {
     sync;

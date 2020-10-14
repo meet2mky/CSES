@@ -138,17 +138,60 @@ Do not panic & work hard you will get it right one day
 
 LOOP ITERATORS MIXING ~ WASTE OF TIME AND LOTS OF BUG
 ******************************************************************/
-
+struct EVENT
+{
+    int ty, ti, id;
+    EVENT(int x = 0, int y = 0, int z = 0) : ti(x), ty(y), id(z)
+    {
+    }
+    inline pair<int, int> toPair() const
+    {
+        return {ti, ty};
+    }
+};
+inline bool operator<(const EVENT &a, const EVENT &b)
+{
+    return a.toPair() < b.toPair();
+}
 void solve()
 {
+    vector<EVENT> events;
+    set<int> rooms;
+    int maxrooms = 1;
+    rooms.insert(1);
     int n;
     R(n);
-    REP(i, 1, n + 1)
+    VI res(n);
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        int a, b;
+        R(a, b);
+        events.push_back(EVENT(a, 1, i));
+        events.push_back(EVENT(b + 1, -1, i));
     }
+    sort(ALL(events));
+    for (auto x : events)
+    {
+        if (x.ty == 1)
+        {
+            // arr
+            if (rooms.empty())
+            {
+                rooms.insert(++maxrooms);
+            }
+            res[x.id] = *rooms.begin();
+            rooms.erase(rooms.begin());
+        }
+        else
+        {
+            // dep
+            rooms.insert(res[x.id]);
+        }
+    }
+    W(maxrooms);
+    W(res);
 }
+
 signed main()
 {
     sync;

@@ -122,7 +122,7 @@ void W(const T &head, const U &... tail)
 #define DEBUG(...)
 #endif
 
-//#define NEEDLONG
+#define NEEDLONG
 #ifdef NEEDLONG
 #define int long long
 #endif
@@ -143,12 +143,24 @@ void solve()
 {
     int n;
     R(n);
-    REP(i, 1, n + 1)
+    VI a(n);
+    int tsum = 0;
+    REP(i, 0, n)
     {
-        LL isq = i * i;
-        W(isq * (isq - 1) / 2 - 4 * (i - 1) * (i - 2));
+        R(a[i]);
+        tsum += a[i];
     }
+    int sum = 0;
+    int best = LINF;
+    SORT(a);
+    REP(i, 0, n)
+    {
+        best = min(best, a[i] * i - sum + tsum - sum - a[i] - a[i] * (n - 1 - i));
+        sum += a[i];
+    }
+    W(best);
 }
+
 signed main()
 {
     sync;
